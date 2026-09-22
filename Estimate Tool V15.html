@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Junior's Pro Finish, LLC - Drywall Estimator</title>
+  <style>
+    :root {
+      --primary-bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --border-color: #dee2e6;
+      --text-main: #212529;
+      --text-muted: #6c757d;
+      --accent-color: #f97316;
+      --footer-bg: #1e293b;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--primary-bg);
+      color: var(--text-main);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding-bottom: 120px; /* Space for fixed footer */
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      color: #333;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 15px;
+    }
+
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .grid-5 { grid-template-columns: repeat(5, 1fr); }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .input-group label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent-color);
+    }
+
+    .full-width { grid-column: 1 / -1; }
+
+    .highlight-value {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--accent-color);
+      border-left: 3px solid var(--accent-color);
+      padding-left: 10px;
+      margin-top: 5px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-add { background-color: var(--accent-color); color: white; }
+    .btn-export { background-color: #10b981; color: white; }
+    .btn-print { background-color: #4b5563; color: white; }
+    .btn-remove { background-color: #ef4444; color: white; font-size: 12px; padding: 4px 8px; }
+
+    .room-card {
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 15px;
+      background: #fafafa;
+    }
+
+    .room-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .room-header h3 {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .room-toggles {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .room-toggles label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    /* Footer Summary */
+    .summary-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--footer-bg);
+      color: white;
+      padding: 20px;
+      box-shadow: 0 -4px 6px rgba(0,0,0,0.1);
+      z-index: 100;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 15px;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .summary-item label {
+      display: block;
+      font-size: 10px;
+      text-transform: uppercase;
+      color: #94a3b8;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .summary-item .val {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .total-bid-row {
+      max-width: 1000px;
+      margin: 15px auto 0;
+      text-align: center;
+      border-top: 1px solid #334155;
+      padding-top: 15px;
+    }
+
+    .total-bid-row label {
+      font-size: 12px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      margin-right: 10px;
+    }
+
+    .total-bid-row .val {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fbbf24;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <div class="card">
+      <h1>Junior's Pro Finish, LLC</h1>
+      <div class="subtitle">Drywall Contracting Estimate</div>
+      
+      <div class="grid grid-4">
+        <div class="input-group">
+          <label>Customer Name</label>
+          <input type="text" placeholder="John Doe">
+        </div>
+        <div class="input-group">
+          <label>Phone Number</label>
+          <input type="text" placeholder="(555) 123-4567">
+        </div>
+        <div class="input-group">
+          <label>Email Address</label>
+          <input type="text" placeholder="john@example.com">
+        </div>
+        <div class="input-group">
+          <label>Date</label>
+          <input type="date" id="current-date">
+        </div>
+        <div class="input-group full-width">
+          <label>Project Site Address</label>
+          <input type="text" placeholder="123 Main St, City, State, Zip">
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div class="card">
+      <h2 class="card-title">Pricing Structure & Material Settings</h2>
+      <div class="grid grid-5">
+        <div class="input-group">
+          <label>Labor Rate ($/SQ FT)</label>
+          <input type="number" id="labor-rate" value="2.90" step="0.01" oninput="calculate()">
+        </div>
+        <div class="input-group">
+          <label>Material Rate ($/SQ FT)</label>
+          <input type="number" id="material-rate" value="0.65" step="0.01" oninput="calculate()">
+        </div>
+        <div class="input-group">
+          <label>Waste Allowance</label>
+          <div style="padding: 8px 0; font-size: 14px; font-weight: 600;">+15% Included</div>
+        </div>
+        <div class="input-group">
+          <label>Sheet Size</label>
+          <select id="sheet-size" onchange="calculate()">
+            <option value="32">4' x 8' (32 sq ft)</option>
+            <option value="40">4' x 10' (40 sq ft)</option>
+            <option value="48" selected>4' x 12' (48 sq ft)</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Combined Rate</label>
+          <div class="highlight-value" id="combined-rate">$3.55</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW Materials Estimator Card -->
+    <div class="card">
+      <h2 class="card-title">Estimated Materials Needed</h2>
+      <div class="grid grid-4">
+        <div class="input-group">
+          <label>Joint Compound (4.5 gal)</label>
+          <div class="highlight-value" id="est-mud">0 buckets</div>
+        </div>
+        <div class="input-group">
+          <label>Drywall Tape (250 ft roll)</label>
+          <div class="highlight-value" id="est-tape">0 rolls</div>
+        </div>
+        <div class="input-group">
+          <label>Drywall Screws (1-¼")</label>
+          <div class="highlight-value" id="est-screws">0 lbs</div>
+        </div>
+        <div class="input-group">
+          <label>Total Drywall Sheets</label>
+          <div class="highlight-value" id="est-total-sheets">0 sheets</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rooms -->
+    <div class="card">
+      <h2 class="card-title">Room Dimensions & Area Breakdown</h2>
+      
+      <div class="btn-group">
+        <button class="btn-add" onclick="addRoom()">➕ Add Room</button>
+        <button class="btn-export" onclick="alert('CSV Export feature pending')">💾 Export to CSV</button>
+        <button class="btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+      </div>
+
+      <div id="rooms-container">
+        <!-- Room Template injects here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Summary -->
+  <div class="summary-footer">
+    <div class="summary-grid">
+      <div class="summary-item">
+        <label>Total Board Area</label>
+        <div class="val" id="sum-area">0 sq ft</div>
+      </div>
+      <div class="summary-item">
+        <label>Est. 1/2" Sheets (Walls)</label>
+        <div class="val" id="sum-wall-sheets">0 sheets</div>
+      </div>
+      <div class="summary-item">
+        <label>Est. 5/8" Sheets (Ceilings)</label>
+        <div class="val" id="sum-ceiling-sheets">0 sheets</div>
+      </div>
+      <div class="summary-item">
+        <label>Estimated Labor</label>
+        <div class="val" id="sum-labor">$0.00</div>
+      </div>
+      <div class="summary-item">
+        <label>Estimated Material</label>
+        <div class="val" id="sum-material">$0.00</div>
+      </div>
+    </div>
+    <div class="total-bid-row">
+      <label>Total Bid Estimate</label>
+      <span class="val" id="sum-total">$0.00</span>
+    </div>
+  </div>
+
+  <script>
+    let roomCount = 0;
+
+    // Set today's date automatically
+    document.getElementById('current-date').valueAsDate = new Date();
+
+    function addRoom() {
+      roomCount++;
+      const container = document.getElementById('rooms-container');
+      
+      const roomDiv = document.createElement('div');
+      roomDiv.className = 'room-card';
+      roomDiv.innerHTML = `
+        <div class="room-header">
+          <h3>Room #${roomCount}</h3>
+          <div class="room-toggles">
+            <label><input type="checkbox" class="check-walls" checked onchange="calculate()"> Walls</label>
+            <label><input type="checkbox" class="check-ceiling" checked onchange="calculate()"> Ceiling</label>
+            <button class="btn-remove" onclick="this.closest('.room-card').remove(); calculate();">Remove</button>
+          </div>
+        </div>
+        <div class="grid grid-4">
+          <div class="input-group">
+            <label>Room Name</label>
+            <input type="text" placeholder="e.g. Living Room">
+          </div>
+          <div class="input-group">
+            <label>Length (ft)</label>
+            <input type="number" class="val-length" value="0" min="0" oninput="calculate()">
+          </div>
+          <div class="input-group">
+            <label>Width (ft)</label>
+            <input type="number" class="val-width" value="0" min="0" oninput="calculate()">
+          </div>
+          <div class="input-group">
+            <label>Height (ft)</label>
+            <input type="number" class="val-height" value="8" min="0" oninput="calculate()">
+          </div>
+        </div>
+      `;
+      
+      container.appendChild(roomDiv);
+      calculate();
+    }
+
+    function calculate() {
+      // Get settings
+      const laborRate = parseFloat(document.getElementById('labor-rate').value) || 0;
+      const materialRate = parseFloat(document.getElementById('material-rate').value) || 0;
+      const sheetSqFt = parseFloat(document.getElementById('sheet-size').value) || 48;
+      const wasteMultiplier = 1.15; // 15% waste
+
+      // Update Combined Rate UI
+      document.getElementById('combined-rate').textContent = '$' + (laborRate + materialRate).toFixed(2);
+
+      let totalWallArea = 0;
+      let totalCeilingArea = 0;
+
+      // Loop over rooms
+      document.querySelectorAll('.room-card').forEach(room => {
+        const l = parseFloat(room.querySelector('.val-length').value) || 0;
+        const w = parseFloat(room.querySelector('.val-width').value) || 0;
+        const h = parseFloat(room.querySelector('.val-height').value) || 0;
+        
+        const hasWalls = room.querySelector('.check-walls').checked;
+        const hasCeiling = room.querySelector('.check-ceiling').checked;
+
+        if (hasWalls) {
+          totalWallArea += 2 * (l + w) * h;
+        }
+        if (hasCeiling) {
+          totalCeilingArea += (l * w);
+        }
+      });
+
+      const totalArea = totalWallArea + totalCeilingArea;
+
+      // Calculate Sheets
+      const wallSheets = Math.ceil((totalWallArea * wasteMultiplier) / sheetSqFt);
+      const ceilingSheets = Math.ceil((totalCeilingArea * wasteMultiplier) / sheetSqFt);
+      const totalSheets = wallSheets + ceilingSheets;
+
+      // Calculate Extra Materials (based on total area)
+      const mudBuckets = Math.ceil(totalArea / 400);
+      const tapeRolls = Math.ceil((totalArea * 0.37) / 250);
+      const screwLbs = Math.ceil(totalArea / 200);
+
+      // Financials
+      const estLabor = totalArea * laborRate;
+      const estMaterial = totalArea * materialRate;
+      const estTotal = estLabor + estMaterial;
+
+      // Update Materials UI
+      document.getElementById('est-mud').textContent = mudBuckets + (mudBuckets === 1 ? ' bucket' : ' buckets');
+      document.getElementById('est-tape').textContent = tapeRolls + (tapeRolls === 1 ? ' roll' : ' rolls');
+      document.getElementById('est-screws').textContent = screwLbs + ' lbs';
+      document.getElementById('est-total-sheets').textContent = totalSheets + ' sheets';
+
+      // Update Footer UI
+      document.getElementById('sum-area').textContent = totalArea.toLocaleString() + ' sq ft';
+      document.getElementById('sum-wall-sheets').textContent = wallSheets + ' sheets';
+      document.getElementById('sum-ceiling-sheets').textContent = ceilingSheets + ' sheets';
+      
+      document.getElementById('sum-labor').textContent = '$' + estLabor.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      document.getElementById('sum-material').textContent = '$' + estMaterial.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      document.getElementById('sum-total').textContent = '$' + estTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
+    // Initialize with one room
+    window.onload = () => {
+      addRoom();
+    };
+  </script>
+</body>
+</html>
